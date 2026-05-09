@@ -20,6 +20,8 @@ import {
   debounceTime,
   distinctUntilChanged,
   finalize,
+  filter,
+  tap
 } from 'rxjs';
 import { Place } from '../../models/place.model';
 import { PlacesService } from '../../services/places.service';
@@ -46,6 +48,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   readonly results = signal<Place[]>([]);
   readonly suggestions = signal<AutocompleteSuggestion[]>([]);
   readonly isLoading = signal(false);
+  readonly isAutocompleteLoading = signal(false);
   readonly error = signal<string | null>(null);
   readonly hasResults = computed(() => this.results().length > 0);
   readonly wishlistCount = input(0);
@@ -56,7 +59,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   private searchTrigger$ = new Subject<string>();
   private locationTrigger$ = new Subject<Coordinates>();
   private destroy$ = new Subject<void>();
-  private clearSuggestionsTimeout: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     effect(() => {
@@ -67,10 +69,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.queryControl.valueChanges
       .pipe(
+        tap(() => this.isAutocompleteLoading.set(true)),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap((query) =>
-          this.autocompleteService.autocomplete(query ?? '').pipe(catchError(() => EMPTY)),
+        switchMap(query => this.autocompleteService.autocomplete(query ?? '').pipe(catchError(() => EMPTY), finalize(() => this.isAutocompleteLoading.set(false)))
         ),
         takeUntil(this.destroy$),
       )
@@ -118,9 +120,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-    if (this.clearSuggestionsTimeout) {
-      clearTimeout(this.clearSuggestionsTimeout);
-    }
   }
 
   selectSuggestion(suggestion: AutocompleteSuggestion): void {
@@ -137,18 +136,12 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
 
-  clearSuggestions(): void {
-    if (this.clearSuggestionsTimeout) {
-      clearTimeout(this.clearSuggestionsTimeout);
-    }
-    this.clearSuggestionsTimeout = setTimeout(() => this.suggestions.set([]), 150);
-  }
-
   searchByLocation(): void {
     if (!navigator.geolocation) {
       this.error.set('Geolocation is not supported.');
       return;
     }
+    this.suggestions.set([]);
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => this.locationTrigger$.next(coords),
       () => this.error.set('Could not get your location.'),
