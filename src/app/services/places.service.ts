@@ -18,7 +18,7 @@ export class PlacesService {
   private readonly CACHE_TTL = 10 * 60 * 1000;
   private readonly SEARCH_URL = '/fsq-api/places/search';
 
-  searchPlaces(query: string, limit = 10): Observable<Place[]> {
+  searchPlaces(query: string, limit = 50): Observable<Place[]> {
     const normalizedQuery = query.trim();
     if (!normalizedQuery) return of([]);
 
@@ -36,7 +36,7 @@ export class PlacesService {
     );
   }
 
-  searchByLocation(lat: number, lng: number, limit = 10, radius = 50000): Observable<Place[]> {
+  searchByLocation(lat: number, lng: number, limit = 50, radius = 50000): Observable<Place[]> {
     const cacheKey = `geo:${lat},${lng}:${limit}:${radius}`;
     const cached = this.getFromCache(cacheKey);
     if (cached) return of(cached);

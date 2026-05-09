@@ -48,7 +48,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   readonly results = signal<Place[]>([]);
   readonly suggestions = signal<AutocompleteSuggestion[]>([]);
   readonly isLoading = signal(false);
-  readonly isAutocompleteLoading = signal(false);
   readonly error = signal<string | null>(null);
   readonly isResults = signal(false);
   readonly hasResults = computed(() => this.results().length > 0);
@@ -70,13 +69,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.queryControl.valueChanges
       .pipe(
-        tap(() => {
-          this.isAutocompleteLoading.set(true);
-          this.suggestions.set([]);
-        }),
+        tap(() => this.suggestions.set([])),
         debounceTime(500),
         distinctUntilChanged(),
-        switchMap(query => this.autocompleteService.autocomplete(query ?? '').pipe(catchError(() => EMPTY), finalize(() => this.isAutocompleteLoading.set(false)))
+        switchMap(query => this.autocompleteService.autocomplete(query ?? '').pipe(catchError(() => EMPTY))
         ),
         takeUntil(this.destroy$),
       )
