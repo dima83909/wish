@@ -21,9 +21,11 @@ import {
   distinctUntilChanged,
   finalize,
 } from 'rxjs';
-import { Place, AutocompleteSuggestion } from '../../models/place.model';
+import { Place } from '../../models/place.model';
 import { PlacesService } from '../../services/places.service';
 import { PlaceCardComponent } from '../place-card/place-card.component';
+import { AutocompleteSuggestion } from '../../models/autocomplete.model';
+import { AutocompleteService } from '../../services/autocomplete.service';
 
 interface Coordinates {
   latitude: number;
@@ -38,6 +40,7 @@ interface Coordinates {
 })
 export class SearchComponent implements OnInit, OnDestroy {
   private readonly placesService = inject(PlacesService);
+  private readonly autocompleteService = inject(AutocompleteService);
 
   readonly queryControl = new FormControl('', { nonNullable: true });
   readonly results = signal<Place[]>([]);
@@ -67,7 +70,7 @@ export class SearchComponent implements OnInit, OnDestroy {
         debounceTime(500),
         distinctUntilChanged(),
         switchMap((query) =>
-          this.placesService.autocomplete(query ?? '').pipe(catchError(() => EMPTY)),
+          this.autocompleteService.autocomplete(query ?? '').pipe(catchError(() => EMPTY)),
         ),
         takeUntil(this.destroy$),
       )
