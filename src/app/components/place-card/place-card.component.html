@@ -13,17 +13,6 @@
       {{ place().categories[0].name }}
     </span>
     }
-
-    @if (place().distance) {
-    <span class="absolute right-3 top-3 rounded-full px-3 py-1 text-xs" style="
-          background: rgba(255, 255, 255, 0.9);
-          color: var(--color-muted);
-          border: 1px solid var(--color-border);
-          backdrop-filter: blur(8px);
-        ">
-      {{ formatDistance(place().distance!) }}
-    </span>
-    }
   </div>
 
   <div class="p-5">
