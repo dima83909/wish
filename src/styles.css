@@ -256,7 +256,8 @@ body {
   .bottom-dock {
     bottom: 2rem;
     align-items: flex-end;
-    zoom: 80%;
+    zoom: 90%;
+    width: calc(100vw);
   }
 
   .search-panel {
