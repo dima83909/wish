@@ -9,10 +9,10 @@
           [formControl]="queryControl"
         />
 
-        @if (queryControl.value.length > 2 && suggestions().length === 0 && !isAutocompleteLoading()) {
+        @if (suggestions().length === 0 && isAutocompleteLoading()) {
           <div class="absolute bottom-full z-10 mb-3 w-full rounded-3xl px-6 py-4"
             style="background: var(--color-card); border: 1px solid var(--color-border); box-shadow: var(--shadow-warm-hover)">
-            <p class="text-sm" style="color: var(--color-muted)">No suggestions found</p>
+            <p class="text-sm" style="color: var(--color-muted)">Searching suggestions...</p>
           </div>
         }
         @if (suggestions().length > 0) {
@@ -74,7 +74,7 @@
       <p class="py-8 text-center" style="color: #c8644d">{{ error() }}</p>
     }
 
-    @if (results().length > 0) {
+    @if (isResults()) {
       <div class="mt-10">
         <p
           class="mb-6 text-xs font-semibold uppercase tracking-[0.28em]"
@@ -82,11 +82,13 @@
         >
           {{ results().length }} places found
         </p>
-        <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-          @for (place of results(); track place.fsq_place_id) {
-            <app-place-card [place]="place" />
-          }
-        </div>
+        @if (results().length > 0) {
+          <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            @for (place of results(); track place.fsq_place_id) {
+              <app-place-card [place]="place" />
+            }
+          </div>
+        }
       </div>
     }
   </div>

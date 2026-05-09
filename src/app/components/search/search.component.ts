@@ -50,6 +50,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   readonly isLoading = signal(false);
   readonly isAutocompleteLoading = signal(false);
   readonly error = signal<string | null>(null);
+  readonly isResults = signal(false);
   readonly hasResults = computed(() => this.results().length > 0);
   readonly wishlistCount = input(0);
   readonly isWishlistPulsing = input(false);
@@ -69,7 +70,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.queryControl.valueChanges
       .pipe(
-        tap(() => this.isAutocompleteLoading.set(true)),
+        tap(() => {
+          this.isAutocompleteLoading.set(true);
+          this.suggestions.set([]);
+        }),
         debounceTime(500),
         distinctUntilChanged(),
         switchMap(query => this.autocompleteService.autocomplete(query ?? '').pipe(catchError(() => EMPTY), finalize(() => this.isAutocompleteLoading.set(false)))
@@ -88,7 +92,10 @@ export class SearchComponent implements OnInit, OnDestroy {
               this.error.set('Something went wrong. Try again.');
               return EMPTY;
             }),
-            finalize(() => this.isLoading.set(false)),
+            finalize(() => {
+              this.isLoading.set(false)
+              this.isResults.set(true);
+            }),
           );
         }),
         takeUntil(this.destroy$),
@@ -107,7 +114,10 @@ export class SearchComponent implements OnInit, OnDestroy {
               this.error.set('Something went wrong. Try again.');
               return EMPTY;
             }),
-            finalize(() => this.isLoading.set(false)),
+            finalize(() => {
+              this.isLoading.set(false)
+              this.isResults.set(true);
+            }),
           );
         }),
         takeUntil(this.destroy$),
