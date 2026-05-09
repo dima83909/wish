@@ -31,5 +31,7 @@
     />
   </main>
 
-  <app-wishlist [isOpen]="isDrawerOpen()" (closed)="closeWishlist()" />
+  @defer (on idle) {
+    <app-wishlist [isOpen]="isDrawerOpen()" (closed)="closeWishlist()" />
+  }
 </div>

@@ -81,8 +81,8 @@ export class PlaceCardComponent {
   });
 
   btnLabel = computed(() => {
-    if (!this.isInWishlist()) return '♡ Save';
-    return this.isHovered() ? '✕ Remove' : '♥ Saved';
+    if (!this.isInWishlist()) return 'Save';
+    return this.isHovered() ? 'Remove' : 'Saved';
   });
 
   btnStyle = computed(() => {
