@@ -22,13 +22,13 @@ body {
   font-weight: 400;
   background: var(--color-background);
   color: var(--color-text);
-  min-height: 100vh;
+  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .app-shell {
-  min-height: 100vh;
+  min-height: 100dvh;
   background: var(--color-background);
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -38,7 +38,7 @@ body {
   flex-direction: column;
   justify-content: center;
   overflow: hidden;
-  height: 100vh;
+  height: 100dvh;
   background:
       radial-gradient(ellipse at 50% 0%, rgba(255, 171, 138, 0.34), transparent 58%),
       linear-gradient(180deg, rgba(247, 197, 168, 0.42), rgba(255, 248, 244, 0));
@@ -256,6 +256,7 @@ body {
   .bottom-dock {
     bottom: 2rem;
     align-items: flex-end;
+    zoom: 80%;
   }
 
   .search-panel {
