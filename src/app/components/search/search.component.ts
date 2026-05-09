@@ -123,13 +123,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     }
   }
 
-  search(): void {
-    const query = this.queryControl.value.trim();
-    if (!query) return;
-    this.suggestions.set([]);
-    this.searchTrigger$.next(query);
-  }
-
   selectSuggestion(suggestion: AutocompleteSuggestion): void {
     this.queryControl.setValue(suggestion.text.primary, { emitEvent: false });
     this.suggestions.set([]);

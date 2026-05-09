@@ -37,6 +37,8 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
+  height: 100vh;
   background:
       radial-gradient(ellipse at 50% 0%, rgba(255, 171, 138, 0.34), transparent 58%),
       linear-gradient(180deg, rgba(247, 197, 168, 0.42), rgba(255, 248, 244, 0));
