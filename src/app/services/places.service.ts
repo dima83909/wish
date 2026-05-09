@@ -28,8 +28,7 @@ export class PlacesService {
 
     return this.httpService.get<{ results: Place[] }>(this.SEARCH_URL, {
       query: normalizedQuery,
-      limit: limit.toString(),
-      intent: 'global',
+      limit: limit.toString()
     })
     .pipe(
       map(response => response.results.map(p => this.mapPlace(p))),
