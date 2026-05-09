@@ -16,6 +16,14 @@ interface FlyingHeart {
   templateUrl: './place-card.component.html',
   styles: [
     `
+      .save-btn {
+        transition:
+          transform 0.2s ease,
+          background 0.2s ease,
+          border-color 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
       .card {
         background: var(--color-card);
         border: 1px solid var(--color-border);

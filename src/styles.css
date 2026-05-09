@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Nunito:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Nunito:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
 
 :root {
@@ -252,7 +252,7 @@ body {
 
 @media (max-width: 640px) {
   .bottom-dock {
-    bottom: 10rem;
+    bottom: 2rem;
     align-items: flex-end;
   }
 
@@ -271,12 +271,11 @@ body {
 h1,
 h2,
 h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Montserrat', serif;
   font-weight: 300;
   color: var(--color-text);
 }
 
-/* Search input */
 .search-input {
   background: var(--color-card);
   border: 1px solid var(--color-border);
@@ -298,7 +297,6 @@ h3 {
   color: var(--color-muted);
 }
 
-/* Buttons */
 .btn-primary {
   background: var(--color-primary);
   color: #ffffff;
@@ -333,7 +331,6 @@ h3 {
   transform: translateY(-2px);
 }
 
-/* Autocomplete dropdown */
 .suggestions-list {
   background: var(--color-card);
   border: 1px solid var(--color-border);
@@ -341,13 +338,4 @@ h3 {
 }
 .suggestion-item:hover {
   background: rgba(247, 197, 168, 0.22);
-}
-
-/* Save button */
-.save-btn {
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
 }

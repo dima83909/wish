@@ -39,7 +39,6 @@ export class WishlistService {
     try {
       storage.setItem(this.STORAGE_KEY, JSON.stringify(this._wishlist()));
     } catch {
-      // Ignore storage failures, e.g. private mode or quota errors.
     }
   }
 
