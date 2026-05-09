@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/fsq-api/:path*",
+      "destination": "/api/fsq?path=:path*"
+    }
+  ]
+}
