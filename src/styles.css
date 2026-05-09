@@ -258,6 +258,7 @@ body {
     align-items: flex-end;
     zoom: 90%;
     width: calc(100vw);
+    gap: 0;
   }
 
   .search-panel {
