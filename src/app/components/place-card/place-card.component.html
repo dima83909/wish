@@ -1,0 +1,98 @@
+<article class="card overflow-hidden rounded-3xl">
+  <div class="img-wrapper relative h-44 overflow-hidden" style="background: linear-gradient(135deg, #fff2eb, #f7c5a8)">
+    @if (categoryIconUrl()) {
+    <img class="card-img h-full w-full object-cover" [src]="categoryIconUrl()" [alt]="place().name" />
+    } @else {
+    <div class="flex h-full w-full items-center justify-center text-4xl" style="color: var(--color-primary)">
+      ✦
+    </div>
+    }
+
+    @if (place().categories.length > 0) {
+    <span class="category-badge absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-semibold">
+      {{ place().categories[0].name }}
+    </span>
+    }
+
+    @if (place().distance) {
+    <span class="absolute right-3 top-3 rounded-full px-3 py-1 text-xs" style="
+          background: rgba(255, 255, 255, 0.9);
+          color: var(--color-muted);
+          border: 1px solid var(--color-border);
+          backdrop-filter: blur(8px);
+        ">
+      {{ formatDistance(place().distance!) }}
+    </span>
+    }
+  </div>
+
+  <div class="p-5">
+    <div class="flex items-start justify-between gap-3">
+      <div class="min-w-0 flex-1">
+        <h3 class="text-2xl leading-tight" style="color: var(--color-text)">
+          {{ place().name }}
+        </h3>
+
+        @if (place().location.formatted_address ?? place().location.city) {
+        <p class="mt-1 truncate text-sm" style="color: var(--color-muted)">
+          {{ place().location.formatted_address ?? place().location.city }}
+        </p>
+        }
+
+        @if (place().categories.length > 1) {
+        <div class="mt-3 flex flex-wrap gap-2">
+          @for (cat of place().categories.slice(1); track cat.fsq_category_id) {
+          <span class="rounded-full px-3 py-1 text-xs" style="
+                  background: #fff8f4;
+                  color: var(--color-muted);
+                  border: 1px solid var(--color-border);
+                ">
+            {{ cat.name }}
+          </span>
+          }
+        </div>
+        }
+
+        @if (place().rating) {
+        <p class="mt-3 text-xs font-semibold" style="color: var(--color-primary)">
+          {{ place().rating }}
+        </p>
+        }
+
+        @if (place().tips?.[0]?.text) {
+        <p class="mt-3 line-clamp-2 text-sm italic leading-relaxed" style="color: var(--color-muted)">
+          "{{ place().tips![0].text }}"
+        </p>
+        }
+
+        <div class="mt-4 flex flex-wrap gap-3">
+          @if (place().website) {
+          <a [href]="place().website" target="_blank" rel="noopener noreferrer" class="text-xs font-semibold underline-offset-2 hover:underline" style="color: var(--color-primary)">
+            Website
+          </a>
+          }
+          @if (place().tel) {
+          <a [href]="'tel:' + place().tel" class="text-xs" style="color: var(--color-muted)">
+            {{ place().tel }}
+          </a>
+          }
+          @if (place().social_media?.instagram) {
+          <a [href]="'https://instagram.com/' + place().social_media!.instagram" target="_blank" rel="noopener noreferrer" class="text-xs hover:underline" style="color: var(--color-muted)">
+            Instagram
+          </a>
+          }
+        </div>
+      </div>
+
+      <button class="save-btn flex-shrink-0 rounded-full px-4 py-2 text-xs font-bold" [style]="btnStyle()" type="button" (click)="toggleWishlist($event)" (mouseenter)="isHovered.set(true)" (mouseleave)="isHovered.set(false)" [attr.aria-label]="isInWishlist() ? 'Remove from wishlist' : 'Add to wishlist'">
+        {{ btnLabel() }}
+      </button>
+    </div>
+  </div>
+</article>
+
+@for (heart of flyingHearts(); track heart.id) {
+<span class="flying-heart" [style.--start-x]="heart.x + 'px'" [style.--start-y]="heart.y + 'px'" [style.--delta-x]="heart.deltaX + 'px'" [style.--delta-y]="heart.deltaY + 'px'" aria-hidden="true">
+  ♥
+</span>
+}

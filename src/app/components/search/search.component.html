@@ -1,0 +1,87 @@
+<section class="search-section px-2 md:px-4" [class.has-results]="hasResults()">
+  <div class="bottom-dock">
+    <div class="search-panel relative flex flex-1 flex-row gap-2">
+      <div class="relative flex-1">
+        <input
+          class="search-input w-full rounded-full px-6 py-4 text-base"
+          type="text"
+          placeholder="Where do you want to go?"
+          [formControl]="queryControl"
+          (keydown.enter)="search()"
+          (blur)="clearSuggestions()"
+        />
+
+        @if (suggestions().length > 0) {
+          <ul
+            class="suggestions-list absolute bottom-full z-10 mb-3 w-full overflow-hidden rounded-3xl"
+          >
+            @for (suggestion of suggestions(); track suggestion.text.primary) {
+              <li
+                class="suggestion-item cursor-pointer px-6 py-3 transition-colors"
+                (mousedown)="selectSuggestion(suggestion)"
+              >
+                <p class="text-sm font-semibold" style="color: var(--color-text)">
+                  {{ suggestion.text.primary }}
+                </p>
+                <p class="mt-0.5 text-xs" style="color: var(--color-muted)">
+                  {{ suggestion.text.secondary }}
+                </p>
+              </li>
+            }
+          </ul>
+        }
+      </div>
+
+      <button class="btn-primary rounded-full px-4 py-4 text-sm md:px-7" type="button" (click)="search()">
+        Search
+      </button>
+      <button class="btn-secondary rounded-full px-4 py-4 text-sm md:px-7" type="button" (click)="searchByLocation()">
+        Near me
+      </button>
+    </div>
+
+    <button
+      class="wishlist-fab"
+      data-wishlist-target
+      [class.wishlist-button-pulse]="isWishlistPulsing()"
+      type="button"
+      (click)="openWishlist()"
+      aria-label="Open wishlist"
+    >
+      <span>♥</span>
+      <span>{{ wishlistCount() }}</span>
+    </button>
+  </div>
+
+  <div class="results-region">
+    @if (isLoading()) {
+      <div class="py-16 text-center">
+        <div
+          class="inline-block h-8 w-8 animate-spin rounded-full border-2"
+          style="border-color: var(--color-primary); border-top-color: transparent"
+        ></div>
+        <p class="mt-4 text-sm" style="color: var(--color-muted)">Discovering places...</p>
+      </div>
+    }
+
+    @if (error()) {
+      <p class="py-8 text-center" style="color: #c8644d">{{ error() }}</p>
+    }
+
+    @if (results().length > 0) {
+      <div class="mt-10">
+        <p
+          class="mb-6 text-xs font-semibold uppercase tracking-[0.28em]"
+          style="color: var(--color-muted)"
+        >
+          {{ results().length }} places found
+        </p>
+        <div class="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+          @for (place of results(); track place.fsq_place_id) {
+            <app-place-card [place]="place" />
+          }
+        </div>
+      </div>
+    }
+  </div>
+</section>

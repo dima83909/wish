@@ -1,0 +1,39 @@
+<div class="wishlist-overlay" [class.open]="isOpen()" (click)="close()" aria-hidden="true"></div>
+
+<aside class="wishlist-drawer" [class.open]="isOpen()" aria-label="Wishlist drawer">
+  <div class="flex items-start justify-between gap-4">
+    <div>
+      <p
+        class="mb-2 text-xs font-semibold uppercase tracking-[0.28em]"
+        style="color: var(--color-muted)"
+      >
+        Your Collection
+      </p>
+      <h2 class="text-5xl leading-none" style="color: var(--color-text)">
+        Wishlist
+        <span class="ml-2 align-middle font-sans text-lg" style="color: var(--color-muted)">
+          ({{ wishlistService.count() }})
+        </span>
+      </h2>
+    </div>
+
+    <button class="drawer-close-btn" type="button" (click)="close()" aria-label="Close wishlist">
+      ×
+    </button>
+  </div>
+
+  @if (wishlistService.count() > 0) {
+    <div class="mt-8 grid grid-cols-1 gap-5">
+      @for (place of wishlistService.wishlist(); track place.fsq_place_id) {
+        <app-place-card [place]="place" />
+      }
+    </div>
+  } @else {
+    <div class="empty-wishlist">
+      <p class="text-3xl" style="font-family: 'Cormorant Garamond', serif">No saved places yet</p>
+      <p class="mt-2 text-sm" style="color: var(--color-muted)">
+        Save a destination and it will appear here.
+      </p>
+    </div>
+  }
+</aside>
