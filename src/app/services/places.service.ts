@@ -36,13 +36,15 @@ export class PlacesService {
     );
   }
 
-  searchByLocation(lat: number, lng: number, limit = 50, radius = 50000): Observable<Place[]> {
-    const cacheKey = `geo:${lat},${lng}:${limit}:${radius}`;
+  searchByLocation(lat: number, lng: number, limit = 50, radius = 10000): Observable<Place[]> {
+    const normalizedLat = lat.toString().slice(0, 6);
+    const normalizedLng = lng.toString().slice(0, 6);
+    const cacheKey = `geo:${normalizedLat},${normalizedLng}:${limit}:${radius}`;
     const cached = this.getFromCache(cacheKey);
     if (cached) return of(cached);
 
     return this.httpService.get<{ results: Place[] }>(this.SEARCH_URL, {
-      ll: `${lat},${lng}`,
+      ll: `${normalizedLat},${normalizedLng}`,
       radius: radius.toString(),
       limit: limit.toString(),
     })
